@@ -7,7 +7,7 @@ on:
 
 jobs:
   db:
-    name: Base de données (Flyway + 29 tests SQL)
+    name: Base de données (Flyway, tests SQL, import BAAC, API)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -38,6 +38,16 @@ jobs:
         run: |
           pip install -r requirements-dev.txt
           pytest -q tests/test_baac_import_db.py
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+      - name: API sur la vraie base (connexion, rôles, audit)
+        working-directory: api
+        run: |
+          set -a; . ../.env; set +a
+          API_TEST_DB=1 DB_HOST=localhost ./mvnw -B test -Dtest=BaseReelleTest
       - name: Arrêter
         if: always()
         run: docker compose down -v
