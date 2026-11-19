@@ -56,7 +56,7 @@ Le jeton est signé avec `API_JWT_SECRET` (fichier `.env`, 32 caractères minimu
 
 Sans jeton, l'API répond 401. Avec un rôle insuffisant, elle répond 403 (par exemple un déclarant qui liste les accidents, ou un analyste qui valide).
 
-Filtres de la liste et de l'export : `mode` (road, aviation…), `from` et `to` (dates AAAA-MM-JJ), `severity` (répétable : fatal, serious, minor, none, unknown), `country` (FR, US…), `source` (onisr_baac…), `includeUnverified`, `includeSimulated`, `page` et `size` (200 au maximum).
+Filtres de la liste et de l'export : `mode` (road, air, rail, maritime), `from` et `to` (dates AAAA-MM-JJ), `severity` (répétable : fatal, serious, minor, none, unknown), `country` (FR, US…), `source` (onisr_baac…), `includeUnverified`, `includeSimulated`, `page` et `size` (200 au maximum).
 
 Par défaut, seuls les accidents **validés et réels** sont renvoyés. Les accidents importés par l'ETL sont « non vérifiés » tant qu'un responsable ne les a pas validés :
 
