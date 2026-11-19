@@ -27,6 +27,17 @@ jobs:
         run: |
           make uml
           git diff --exit-code docs/03-uml/classes.md
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Import BAAC sur le jeu de test
+        working-directory: ai
+        env:
+          DB_HOST: localhost
+          ETL_TEST_DB: '1'
+        run: |
+          pip install -r requirements-dev.txt
+          pytest -q tests/test_baac_import_db.py
       - name: Arrêter
         if: always()
         run: docker compose down -v
