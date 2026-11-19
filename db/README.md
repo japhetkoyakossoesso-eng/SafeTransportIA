@@ -5,7 +5,8 @@
 | `migrations/V1__schema_core.sql` | extensions, types harmonisés, 27 tables (schémas `core` et `sensitive`), index, triggers d'audit et de cohérence | `001_schema.sql` |
 | `migrations/V2__schema_bi.sql` | schéma `bi` en étoile pour Power BI : `dim_date`, `dim_mode`, `dim_location`, `dim_severity`, `dim_source`, `fact_occurrences`, `annual_rates` | `003_bi.sql` |
 | `migrations/V3__security_roles.sql` | rôles par composant : `st_api`, `st_etl`, `st_ml`, `st_bi_reader`, `st_agent_readonly` | `004_security.sql` |
-| `seed/R__seed_simulated.sql` | référentiels (modes, rôles, organisations, sources ONISR/NTSB) + jeu de test **simulé** (dev et CI seulement) | `002_seed.sql` |
+| `migrations/V4__referentiels_et_sources.sql` | modes, rôles, organisations, sources réelles (BAAC, NTSB, exposition) | phase 02 |
+| `seed/R__seed_simulated.sql` | comptes de démo + source `sim_demo` (id 900) + faits **simulés** (dev et CI seulement) | `002_seed.sql` |
 | `tests/900_tests.sql` | 29 tests de contraintes, dans une transaction annulée | `900_tests.sql` |
 | `initdb/10_app_roles.sh` | comptes de connexion `app_api`, `app_ai`, `app_admin`, `app_bi` + schéma `admin` (exécuté une fois, à la création du volume) | nouveau |
 | `Dockerfile` | image `pgvector/pgvector:pg16` + paquet PostGIS 3 (multi-architecture) | nouveau |
@@ -22,13 +23,12 @@ make db-reset     # repart d'une base vide
 
 ## Règles
 
-* Ne jamais modifier une migration déjà appliquée : ajouter `V4__…`, `V5__…`.
+* Ne jamais modifier une migration déjà appliquée : ajouter `V5__…`, `V6__…`.
 * Une nouvelle table doit recevoir ses `GRANT` vers les rôles `st_*` dans sa propre migration
   (les `GRANT … ON ALL TABLES` de V3 ne s'appliquent qu'aux tables existantes à ce moment-là).
 * Le seed simulé est une migration *repeatable* : Flyway la rejoue si son contenu change, ce qui
   échouera sur les contraintes d'unicité. Après l'avoir modifiée : `make db-reset`.
-* À faire avant une mise en production : extraire les référentiels réels (modes, rôles,
-  organisations, sources) du seed vers une migration versionnée.
+* Les référentiels réels sont dans V4 ; le seed ne contient que des données de démo.
 
 ## Comment le schéma distingue les six natures de données (§1)
 

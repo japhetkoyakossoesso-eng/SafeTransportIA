@@ -31,7 +31,7 @@ END $$;
 -- 1. Unicité des identifiants sources (dédoublonnage / idempotence)
 SELECT pg_temp.expect_error('accident en double (même source, même source_ref) refusé',
   $$INSERT INTO accidents (transport_mode_id, occurred_date, data_source_id, source_ref)
-    VALUES (1, '2025-03-14', 3, 'SIM-ROAD-0001')$$, '23505');
+    VALUES (1, '2025-03-14', 900, 'SIM-ROAD-0001')$$, '23505');
 
 SELECT pg_temp.expect_error('enregistrement brut identique refusé',
   $$INSERT INTO source_records (data_source_id, external_id, record_sha256, payload)
@@ -62,7 +62,7 @@ SELECT pg_temp.expect_error('recommandation « implemented » refusée (seule un
 -- 3. Hypothèse vs fait établi
 SELECT pg_temp.expect_error('suggestion IA enregistrée comme fait établi refusée',
   $$INSERT INTO accident_factors (accident_id, category, description, assertion_level, stated_by, data_source_id)
-    VALUES (1, 'human', 'x', 'established', 'ai_suggestion', 3)$$, '23514');
+    VALUES (1, 'human', 'x', 'established', 'ai_suggestion', 900)$$, '23514');
 SELECT pg_temp.expect_error('fait établi sans preuve refusé',
   $$INSERT INTO accident_factors (accident_id, category, description, assertion_level)
     VALUES (1, 'human', 'x', 'established')$$, '23514');
@@ -72,7 +72,7 @@ SELECT pg_temp.expect_error('facteur rattaché à la fois à un accident et un i
 
 -- 4. Données simulées
 SELECT pg_temp.expect_true('fait issu de sim_demo marqué simulé automatiquement',
-  (SELECT bool_and(is_simulated) FROM accidents WHERE data_source_id = 3));
+  (SELECT bool_and(is_simulated) FROM accidents WHERE data_source_id = 900));
 SELECT pg_temp.expect_error('donnée simulée rattachée à une source réelle refusée',
   $$INSERT INTO accidents (transport_mode_id, occurred_date, data_source_id, source_ref, is_simulated)
     VALUES (1, '2025-01-01', 1, 'FAKE-1', true)$$, 'P0001');
@@ -82,10 +82,10 @@ SELECT pg_temp.expect_error('source « simulation » non marquée simulée refus
 -- 5. Gravité harmonisée cohérente
 SELECT pg_temp.expect_error('accident mortel avec 0 tué refusé',
   $$INSERT INTO accidents (transport_mode_id, occurred_date, severity, fatalities, data_source_id, source_ref)
-    VALUES (1, '2025-01-01', 'fatal', 0, 3, 'SIM-X-1')$$, '23514');
+    VALUES (1, '2025-01-01', 'fatal', 0, 900, 'SIM-X-1')$$, '23514');
 SELECT pg_temp.expect_error('tués > 0 mais gravité « minor » refusé',
   $$INSERT INTO accidents (transport_mode_id, occurred_date, severity, fatalities, data_source_id, source_ref)
-    VALUES (1, '2025-01-01', 'minor', 2, 3, 'SIM-X-2')$$, '23514');
+    VALUES (1, '2025-01-01', 'minor', 2, 900, 'SIM-X-2')$$, '23514');
 
 -- 6. Prédictions probabilistes bornées, sans fuite temporelle
 SELECT pg_temp.expect_error('score hors intervalle de confiance refusé',

@@ -8,7 +8,7 @@ et suivre leur efficacité.
 > La prédiction est probabiliste : elle aide l'analyse et ne doit pas servir de système autonome de
 > pilotage ou de sécurité critique. Les données simulées sont toujours marquées `is_simulated`.
 
-Feuille de route : https://claude.ai/artifact/8HTCanEuPkQNKmc2kRmBNy · Architecture : [docs/architecture.md](docs/architecture.md) · Cadrage et backlog : [docs/01-cadrage](docs/01-cadrage/README.md)
+Feuille de route : https://claude.ai/artifact/8HTCanEuPkQNKmc2kRmBNy · Architecture : [docs/architecture.md](docs/architecture.md) · Cadrage et backlog : [docs/01-cadrage](docs/01-cadrage/README.md) · Sources : [docs/02-sources](docs/02-sources/README.md)
 
 ## Contenu du dépôt
 
@@ -42,7 +42,7 @@ s'arrête) → `api`, `ai`, `admin`, `notifications`, `web`.
 | Vérifier | URL |
 |---|---|
 | Front | http://localhost:5173 (affiche l'état de l'API et de l'IA) |
-| API | http://localhost:8080/api/v1/health · http://localhost:8080/api/v1/transport-modes |
+| API | http://localhost:8080/api/v1/health · http://localhost:8080/api/v1/sources |
 | IA | http://localhost:8000/health · documentation interactive http://localhost:8000/docs |
 | Admin | http://localhost:8001/health |
 | Notifications | http://localhost:3000/health |
