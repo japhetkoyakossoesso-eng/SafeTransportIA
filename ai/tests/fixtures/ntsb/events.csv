@@ -1,0 +1,9 @@
+ev_id,ntsb_no,ev_type,ev_date,ev_dow,ev_time,ev_tmzn,ev_city,ev_state,ev_country,latitude,longitude,dec_latitude,dec_longitude,ev_nr_apt_id,apt_name,ev_highest_injury,inj_tot_f,inj_tot_s,inj_tot_m,inj_tot_n
+"20230101000001","ERA23FA001","ACC",2023-01-05,"Th",1430,"EST","ORLANDO","FL","USA","283200N","0811800W",28.5333,-81.3,"MCO","ORLANDO INTL","FATL",2,0,0,0
+"20230201000002","WPR23IA002","INC",2023-02-10,"Fr",815,"PST","SEATTLE","WA","USA","",,47.45,-122.3,"SEA","SEATTLE-TACOMA INTL","NONE",0,0,0,150
+"20230301000003","CEN23LA003","ACC",2023-03-15,"We",1200,"CDT","DALLAS","TX","USA","324500N","0965000W",,,"","","SERS",0,1,0,1
+"20230401000004","ANC23FA004","ACC",2023-04-01,"Sa",930,"XYZ","ANCHORAGE","AK","USA","",,,,"","","FATL",,,,
+"20230501000005","ERA23XX005","OCC",2023-05-02,"Tu",1000,"EDT","BOSTON","MA","USA","",,,,"","","NONE",0,0,0,2
+"20230601000006","DCA23WA006","ACC",2023-06-20,"Tu",1600,"UTC","TORONTO","","CAN","",,43.68,-79.63,"","","MINR",0,0,1,3
+"20230601000006","DCA23WA006","ACC",2023-06-20,"Tu",1600,"UTC","TORONTO","","CAN","",,43.68,-79.63,"","","MINR",0,0,1,3
+"20220701000007","ERA22LA007","ACC",2022-07-04,"Mo",1100,"EDT","ATLANTA","GA","USA","",,33.64,-84.43,"ATL","ATLANTA INTL","MINR",0,0,1,0
