@@ -1,8 +1,5 @@
 import { createServer } from 'node:http';
 
-// Stub sans dépendance : /health et une file d'attente en mémoire.
-// Plus tard : abonnement aux événements (nouvel accident validé, recommandation en retard…),
-// envoi e-mail / WebSocket, journalisation dans la base.
 export function createApp() {
   const queue = [];
 

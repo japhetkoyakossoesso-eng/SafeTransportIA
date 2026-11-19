@@ -1,5 +1,3 @@
-# SafeTransport AI — environnement de développement complet.
-# Démarrage : cp .env.example .env && docker compose up --build
 name: safetransport
 
 services:
@@ -24,7 +22,7 @@ services:
       timeout: 5s
       retries: 20
 
-  # Applique db/migrations (et db/seed en dev) puis s'arrête.
+  # applique les migrations puis s'arrête
   flyway:
     image: flyway/flyway:11
     command: -connectRetries=20 migrate

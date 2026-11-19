@@ -25,12 +25,12 @@ class HealthControllerTest {
 
     @Test
     void healthReportsDatabase() throws Exception {
-        when(jdbc.queryForObject(anyString(), eq(String.class))).thenReturn("postgres 16, postgis 3.5");
+        when(jdbc.queryForObject(anyString(), eq(String.class))).thenReturn("postgis 3.5");
 
         mvc.perform(get("/api/v1/health"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.status").value("ok"))
-            .andExpect(jsonPath("$.database").value("postgres 16, postgis 3.5"));
+            .andExpect(jsonPath("$.database").value("postgis 3.5"));
     }
 
     @Test

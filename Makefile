@@ -1,4 +1,3 @@
-# Raccourcis (facultatifs) : make up, make test…
 .PHONY: env up down logs db-migrate db-test db-reset psql test
 
 env:
@@ -20,7 +19,6 @@ db-migrate: env
 db-test:
 	docker compose exec -T db sh -c 'psql -v ON_ERROR_STOP=1 -U "$$POSTGRES_USER" -d "$$POSTGRES_DB" -f -' < db/tests/900_tests.sql
 
-# Supprime le volume de données puis recrée la base et rejoue les migrations.
 db-reset: env
 	docker compose down -v
 	$(MAKE) db-migrate

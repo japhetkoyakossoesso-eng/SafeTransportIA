@@ -1,10 +1,3 @@
-"""RAG sur les rapports d'enquête (BEA, NTSB…).
-
-Stub. Pipeline prévu : core.documents → core.document_chunks (tsvector + vector(1024))
-→ recherche hybride → réponse du LLM avec citations (core.rag_queries / rag_query_chunks),
-ou abstention justifiée si les sources ne suffisent pas.
-"""
-
 from fastapi import APIRouter
 from pydantic import BaseModel, Field
 
@@ -15,12 +8,13 @@ class Question(BaseModel):
     question: str = Field(min_length=3, max_length=2000)
 
 
+# Tant que le RAG n'est pas fait, on refuse de répondre plutôt que d'inventer
 @router.post("/ask")
-def ask(q: Question) -> dict:
+def ask(q: Question):
     return {
         "question": q.question,
         "answer": None,
         "citations": [],
         "abstained": True,
-        "reason": "RAG non implémenté (stub).",
+        "reason": "RAG pas encore implémenté",
     }

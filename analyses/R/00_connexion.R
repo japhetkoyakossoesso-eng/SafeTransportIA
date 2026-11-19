@@ -1,5 +1,3 @@
-# Connexion à la base SafeTransport AI (lecture seule, schéma bi).
-# Les identifiants sont lus dans les variables d'environnement (fichier .env à la racine).
 library(DBI)
 
 if (file.exists(".env")) readRenviron(".env")

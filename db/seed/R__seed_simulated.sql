@@ -1,16 +1,8 @@
--- Migration Flyway convertie depuis 002_seed.sql (V1 du modèle, testé 29/29).
--- BEGIN/COMMIT retirés : Flyway exécute chaque migration dans sa propre transaction.
--- Migration « repeatable » chargée uniquement en développement/CI (FLYWAY_LOCATIONS inclut db/seed).
--- Elle n'est pas idempotente : si vous la modifiez, recréez la base (make db-reset).
--- =============================================================================
--- SafeTransport AI — Données de référence + jeu de test SIMULÉ
--- Toutes les données factuelles ci-dessous sont fictives et rattachées à la
--- source « sim_demo » (kind = simulation), donc is_simulated = true.
--- =============================================================================
+-- Données de référence + jeu de test SIMULÉ
 
 SET search_path = core, public;
 
--- Référentiels -----------------------------------------------------------------
+-- Référentiels
 INSERT INTO transport_modes (code, label_fr, label_en, definition) VALUES
   ('road',     'Routier',       'Road',     'Accident corporel : au moins un véhicule, voie ouverte à la circulation, au moins une victime (définition ONISR).'),
   ('air',      'Aérien',        'Air',      'Accident au sens de l''Annexe 13 OACI ; les incidents graves sont enregistrés comme incidents.'),
@@ -46,7 +38,7 @@ SELECT u.id, r.id FROM users u JOIN roles r ON
 INSERT INTO sensitive.user_identities (user_id, email, full_name)
 SELECT id, username || '@example.org', initcap(replace(username, '.', ' ')) FROM users WHERE NOT is_service_account;
 
--- Sources ----------------------------------------------------------------------
+-- Sources
 INSERT INTO data_sources (code, name, kind, provider_org_id, transport_mode_id, country_code, url, license, data_format,
                           known_biases, default_confidence, validation_status, validated_by, validated_at) VALUES
   ('onisr_baac', 'Bases annuelles des accidents corporels (BAAC)', 'open_data', 1, 1, 'FR',
@@ -59,7 +51,7 @@ INSERT INTO data_sources (code, name, kind, provider_org_id, transport_mode_id, 
 INSERT INTO data_sources (code, name, kind, provider_org_id, country_code, license, data_format, default_confidence, is_simulated)
 VALUES ('sim_demo', 'Jeu de données simulé pour tests et démonstration', 'simulation', 4, 'FR', 'CC0', 'sql', 'unknown', true);
 
--- Faits simulés ----------------------------------------------------------------
+-- Faits simulés
 INSERT INTO locations (geom, precision, country_code, admin1, admin2, municipality, insee_code) VALUES
   (ST_SetSRID(ST_MakePoint(1.4442, 43.6047), 4326)::geography, 'exact', 'FR', 'Occitanie', 'Haute-Garonne', 'Toulouse', '31555'),
   (ST_SetSRID(ST_MakePoint(1.3677, 43.6293), 4326)::geography, 'exact', 'FR', 'Occitanie', 'Haute-Garonne', 'Blagnac', '31069'),
@@ -100,4 +92,3 @@ VALUES (1, 'FR', '2025-01-01', '2025-12-31', 'vehicle_km', 6.0e11, 'véhicules-k
 INSERT INTO corrective_actions (title, description, kind, origin, transport_mode_id, accident_id, status, proposed_by)
 VALUES ('Revoir la signalisation du carrefour', 'SIMULÉ — ajout d''un feu tricolore et marquage.', 'recommendation',
         'internal_analysis', 1, 1, 'proposed', 2);
-

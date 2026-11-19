@@ -1,11 +1,4 @@
--- Migration Flyway convertie depuis 004_security.sql (V1 du modèle, testé 29/29).
--- BEGIN/COMMIT retirés : Flyway exécute chaque migration dans sa propre transaction.
--- =============================================================================
--- SafeTransport AI — Rôles PostgreSQL par composant (moindre privilège)
--- Rôles « groupes » sans connexion ; les comptes de connexion (mots de passe hors
--- dépôt, via variables d'environnement / secrets Docker) en héritent.
--- =============================================================================
-
+-- Rôles PostgreSQL par composant (moindre privilège)
 
 DO $$
 DECLARE r text;
@@ -53,4 +46,3 @@ GRANT SELECT ON ALL TABLES IN SCHEMA core, bi TO st_agent_readonly;
 REVOKE SELECT ON core.audit_logs, core.users FROM st_agent_readonly;
 
 -- Personne d'autre que st_api ne lit le schéma sensitive (vérifié dans les tests).
-

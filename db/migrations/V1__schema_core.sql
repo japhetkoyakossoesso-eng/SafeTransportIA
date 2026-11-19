@@ -1,24 +1,4 @@
--- Migration Flyway convertie depuis 001_schema.sql (V1 du modèle, testé 29/29).
--- BEGIN/COMMIT retirés : Flyway exécute chaque migration dans sa propre transaction.
--- =============================================================================
--- SafeTransport AI — Modèle de données initial (V1)
--- PostgreSQL 16 + PostGIS 3 + pgvector
---
--- Principes (cahier des charges V3, §1, §4, §10) :
---   * clés primaires/étrangères explicites, unicité sur les identifiants sources ;
---   * horodatage (created_at / updated_at) et provenance sur chaque fait ;
---   * niveau de confiance + statut de validation sur chaque fait ;
---   * distinction explicite : accident / incident / signalement non vérifié /
---     hypothèse / recommandation / données simulées ;
---   * données personnelles isolées dans le schéma `sensitive` ;
---   * journal d'audit alimenté automatiquement par trigger.
---
--- Schémas :
---   core       données métier, sources, imports, IA, RAG, audit
---   sensitive  données personnelles (accès restreint)
---   bi         modèle en étoile pour Power BI (voir 003_bi.sql)
--- =============================================================================
-
+-- Modèle de données initial (V1)
 
 CREATE EXTENSION IF NOT EXISTS postgis;
 CREATE EXTENSION IF NOT EXISTS vector;
@@ -29,9 +9,7 @@ CREATE SCHEMA IF NOT EXISTS sensitive;
 
 SET search_path = core, public;
 
--- -----------------------------------------------------------------------------
 -- 1. Types énumérés (vocabulaire harmonisé)
--- -----------------------------------------------------------------------------
 
 -- Cycle de validation d'une donnée. « unverified » = signalement non vérifié.
 CREATE TYPE validation_status AS ENUM
@@ -84,9 +62,7 @@ CREATE TYPE exposure_metric AS ENUM
 
 CREATE TYPE actor_type AS ENUM ('user', 'service', 'ai_agent', 'system');
 
--- -----------------------------------------------------------------------------
 -- 2. Fonctions utilitaires
--- -----------------------------------------------------------------------------
 
 CREATE OR REPLACE FUNCTION core.set_updated_at() RETURNS trigger
 LANGUAGE plpgsql AS $$
@@ -95,9 +71,7 @@ BEGIN
   RETURN NEW;
 END $$;
 
--- -----------------------------------------------------------------------------
 -- 3. Référentiels, organisations, utilisateurs, rôles
--- -----------------------------------------------------------------------------
 
 CREATE TABLE transport_modes (
   id          smallint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -158,9 +132,7 @@ CREATE TABLE sensitive.user_identities (
   updated_at     timestamptz NOT NULL DEFAULT now()
 );
 
--- -----------------------------------------------------------------------------
 -- 4. Sources, imports, enregistrements bruts (traçabilité + dédoublonnage)
--- -----------------------------------------------------------------------------
 
 CREATE TABLE data_sources (
   id                  bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -232,9 +204,7 @@ CREATE TABLE source_records (
 CREATE INDEX source_records_import_idx ON source_records (import_job_id);
 CREATE INDEX source_records_quality_idx ON source_records (quality_status) WHERE quality_status <> 'valid';
 
--- -----------------------------------------------------------------------------
 -- 5. Lieux, conditions météo, véhicules
--- -----------------------------------------------------------------------------
 
 CREATE TABLE locations (
   id              bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -282,12 +252,10 @@ CREATE TABLE vehicles (
   UNIQUE (transport_mode_id, public_identifier)
 );
 
--- -----------------------------------------------------------------------------
 -- 6. Faits : accidents, incidents, signalements
 -- Colonnes de provenance/qualité communes :
 --   data_source_id, source_record_id, source_ref, confidence, validation_status,
 --   validated_by/at, is_simulated, created_at/updated_at
--- -----------------------------------------------------------------------------
 
 CREATE TABLE accidents (
   id                    bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -453,9 +421,7 @@ CREATE TABLE exposure_measures (
   UNIQUE (transport_mode_id, country_code, admin1, period_start, period_end, metric, data_source_id)
 );
 
--- -----------------------------------------------------------------------------
 -- 7. Documents et RAG (pgvector)
--- -----------------------------------------------------------------------------
 
 CREATE TABLE documents (
   id                 bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -545,9 +511,7 @@ CREATE TABLE rag_query_chunks (
   PRIMARY KEY (rag_query_id, chunk_id)
 );
 
--- -----------------------------------------------------------------------------
 -- 8. Prévention : recommandations, mesures, évaluation
--- -----------------------------------------------------------------------------
 
 CREATE TABLE corrective_actions (
   id                 bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -601,9 +565,7 @@ CREATE TABLE action_evaluations (
   CHECK (ci_low IS NULL OR ci_high IS NULL OR ci_low <= ci_high)
 );
 
--- -----------------------------------------------------------------------------
 -- 9. IA prédictive (probabiliste, aide à l'analyse uniquement)
--- -----------------------------------------------------------------------------
 
 CREATE TABLE risk_predictions (
   id                 bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -634,12 +596,10 @@ CREATE INDEX risk_predictions_zone_gix ON risk_predictions USING gist (zone);
 COMMENT ON TABLE risk_predictions IS
   'Scores probabilistes d''aide à l''analyse. Ne doivent pas piloter un système de sécurité critique.';
 
--- -----------------------------------------------------------------------------
 -- 10. Audit
 -- L'application positionne l'acteur par transaction :
 --   SET LOCAL app.user_id = '42'; SET LOCAL app.actor_type = 'user';
 --   SET LOCAL app.request_id = '…';
--- -----------------------------------------------------------------------------
 
 CREATE TABLE audit_logs (
   id            bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -709,9 +669,7 @@ END $$;
 CREATE TRIGGER audit_logs_no_update BEFORE UPDATE OR DELETE ON audit_logs
   FOR EACH ROW EXECUTE FUNCTION core.audit_logs_immutable();
 
--- -----------------------------------------------------------------------------
 -- 11. Cohérence « simulé » : un fait issu d'une source de simulation est simulé.
--- -----------------------------------------------------------------------------
 
 CREATE OR REPLACE FUNCTION core.enforce_simulated_flag() RETURNS trigger
 LANGUAGE plpgsql AS $$
@@ -730,4 +688,3 @@ CREATE TRIGGER incidents_simulated_flag BEFORE INSERT OR UPDATE OF data_source_i
   FOR EACH ROW EXECUTE FUNCTION core.enforce_simulated_flag();
 CREATE TRIGGER exposure_simulated_flag BEFORE INSERT OR UPDATE OF data_source_id, is_simulated ON exposure_measures
   FOR EACH ROW EXECUTE FUNCTION core.enforce_simulated_flag();
-

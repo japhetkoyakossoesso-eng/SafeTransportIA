@@ -9,10 +9,8 @@ spring:
     username: ${API_DB_USER:app_api}
     password: ${API_DB_PASSWORD:change-me-api}
     hikari:
-      # L'API démarre même si la base n'est pas encore prête ; /api/v1/health le signale.
+      # l'API démarre même si la base n'est pas prête
       initialization-fail-timeout: -1
-
-# Le schéma appartient aux migrations Flyway de db/ : l'API ne crée ni ne modifie de tables.
 
 management:
   endpoints:

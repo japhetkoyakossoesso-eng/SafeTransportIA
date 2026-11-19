@@ -2,8 +2,6 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    """Configuration lue dans les variables d'environnement (voir .env.example)."""
-
     model_config = SettingsConfigDict(env_file=("../.env", ".env"), extra="ignore")
 
     db_host: str = "localhost"
@@ -13,11 +11,8 @@ class Settings(BaseSettings):
     ai_db_password: str = "change-me-ai"
 
     @property
-    def database_url(self) -> str:
-        return (
-            f"postgresql://{self.ai_db_user}:{self.ai_db_password}"
-            f"@{self.db_host}:{self.db_port}/{self.postgres_db}"
-        )
+    def database_url(self):
+        return f"postgresql://{self.ai_db_user}:{self.ai_db_password}@{self.db_host}:{self.db_port}/{self.postgres_db}"
 
 
 settings = Settings()

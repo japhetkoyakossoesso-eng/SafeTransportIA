@@ -12,5 +12,4 @@ COPY . .
 RUN composer dump-autoload --optimize && cp -n .env.example .env
 
 EXPOSE 8000
-# Sans APP_KEY fournie (.env racine : ADMIN_APP_KEY), une clé temporaire est générée au démarrage.
 CMD ["sh", "-c", "[ -n \"$APP_KEY\" ] || export APP_KEY=$(php artisan key:generate --show); exec php artisan serve --host=0.0.0.0 --port=8000"]

@@ -1,7 +1,6 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 
-// En dev, Vite relaie les appels vers les services lancés en local ou via Docker Compose.
 export default defineConfig({
   plugins: [vue()],
   server: {

@@ -1,11 +1,4 @@
--- Migration Flyway convertie depuis 003_bi.sql (V1 du modèle, testé 29/29).
--- BEGIN/COMMIT retirés : Flyway exécute chaque migration dans sa propre transaction.
--- =============================================================================
--- SafeTransport AI — Modèle en étoile pour Power BI (schéma bi)
--- Faits : accidents + incidents (une ligne par événement).
--- Dimensions : temps, mode, lieu, gravité, source.
--- Power BI filtre par défaut : validation_status = 'validated' AND NOT is_simulated.
--- =============================================================================
+-- Modèle en étoile pour Power BI (schéma bi)
 
 CREATE SCHEMA IF NOT EXISTS bi;
 SET search_path = bi, core, public;
@@ -86,4 +79,3 @@ CREATE VIEW bi.annual_rates AS
     ON e.transport_mode_id = c.transport_mode_id AND e.country_code = c.country_code AND e.admin1 = ''
    AND e.period_start = make_date(c.year, 1, 1) AND e.period_end = make_date(c.year, 12, 31)
    AND e.is_simulated = c.is_simulated;
-

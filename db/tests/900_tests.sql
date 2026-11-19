@@ -1,8 +1,4 @@
--- =============================================================================
--- SafeTransport AI — Tests SQL des contraintes (exécutés après 001→004).
--- Tout s'exécute dans une transaction annulée à la fin : la base reste intacte.
--- Usage : psql -v ON_ERROR_STOP=1 -f 900_tests.sql
--- =============================================================================
+-- Tests SQL des contraintes, dans une transaction annulée à la fin
 
 \pset tuples_only on
 \pset format unaligned
