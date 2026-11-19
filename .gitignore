@@ -1,0 +1,51 @@
+# Secrets
+.env
+!.env.example
+*.pem
+*.key
+
+# OS / éditeurs
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Java / Maven (api)
+api/target/
+
+# Python (ai)
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+ai/models/
+ai/data/
+
+# Node (web, notifications)
+node_modules/
+dist/
+coverage/
+
+# Laravel (admin)
+admin/vendor/
+admin/.env
+admin/.phpunit.result.cache
+admin/public/build/
+admin/public/hot
+admin/storage/*.key
+admin/database/database.sqlite
+
+# R (analyses)
+.Rhistory
+.RData
+.Rproj.user/
+analyses/output/
+
+# Données brutes (jamais dans git : trop volumineuses, licences variables)
+data/raw/
+data/processed/
+
+# Power BI : le fichier .pbix contient des données en cache
+bi/**/*.pbix
