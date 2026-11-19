@@ -23,6 +23,21 @@ jobs:
         run: |
           docker compose exec -T db psql -v ON_ERROR_STOP=1 -U safetransport_owner -d safetransport \
             -f - < db/tests/900_tests.sql
+      - name: Diagramme de classes à jour
+        run: |
+          make uml
+          git diff --exit-code docs/03-uml/classes.md
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Import BAAC sur le jeu de test
+        working-directory: ai
+        env:
+          DB_HOST: localhost
+          ETL_TEST_DB: '1'
+        run: |
+          pip install -r requirements-dev.txt
+          pytest -q tests/test_baac_import_db.py
       - name: Arrêter
         if: always()
         run: docker compose down -v

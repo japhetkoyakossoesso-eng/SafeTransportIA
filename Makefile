@@ -1,4 +1,4 @@
-.PHONY: env up down logs db-migrate db-test db-reset psql test
+.PHONY: env up down logs db-migrate db-test db-reset psql test uml
 
 env:
 	@test -f .env || cp .env.example .env
@@ -32,3 +32,7 @@ test:
 	cd admin && php artisan test
 	cd web && npm test
 	cd notifications && npm test
+
+# Régénère le diagramme de classes depuis la base
+uml:
+	docker compose exec -T db sh -c 'psql -v ON_ERROR_STOP=1 -U "$$POSTGRES_USER" -d "$$POSTGRES_DB" -f -' < db/tools/uml_classes.sql > docs/03-uml/classes.md
