@@ -8,7 +8,7 @@ et suivre leur efficacité.
 > La prédiction est probabiliste : elle aide l'analyse et ne doit pas servir de système autonome de
 > pilotage ou de sécurité critique. Les données simulées sont toujours marquées `is_simulated`.
 
-Feuille de route : https://claude.ai/artifact/8HTCanEuPkQNKmc2kRmBNy · Architecture : [docs/architecture.md](docs/architecture.md)
+Feuille de route : https://claude.ai/artifact/8HTCanEuPkQNKmc2kRmBNy · Architecture : [docs/architecture.md](docs/architecture.md) · Cadrage et backlog : [docs/01-cadrage](docs/01-cadrage/README.md)
 
 ## Contenu du dépôt
 
