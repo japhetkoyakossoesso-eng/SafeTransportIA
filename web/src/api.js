@@ -68,6 +68,14 @@ export async function connexion(username, password) {
   return corps;
 }
 
+export function lireUtilisateur() {
+  try {
+    return JSON.parse(localStorage.getItem('safetransport.utilisateur') || '{}');
+  } catch {
+    return {};
+  }
+}
+
 export function deconnexion() {
   enregistrerJeton(null);
 }

@@ -123,7 +123,8 @@ def transformer(ev_id, groupe):
         lat = lon = None
 
     code = e["ev_country"].upper()
-    pays = PAYS.get(code) or (code if len(code) == 2 else None)
+    # Le NTSB a aussi des codes à lui pour les mers (ex. « A1 ») : on ne garde que deux lettres
+    pays = PAYS.get(code) or (code if re.fullmatch("[A-Z]{2}", code) else None)
     if pays is None:
         problemes.append(probleme("pays_inconnu", "ev_country", f"code pays « {code} » non converti"))
         pays = "ZZ"

@@ -49,6 +49,8 @@ Le jeton est signé avec `API_JWT_SECRET` (fichier `.env`, 32 caractères minimu
 | `GET /api/v1/accidents` | analyst, researcher, safety_manager, admin | liste filtrée et paginée |
 | `GET /api/v1/accidents/{id}` | idem | fiche détail avec lieu, source et facteurs |
 | `GET /api/v1/accidents/export.csv` | idem | mêmes filtres que la liste, sans pagination |
+| `GET /api/v1/accidents/stats/annual` | idem | accidents, accidents mortels et tués par an, mêmes filtres que la liste |
+| `GET /api/v1/accidents/stats/overview` | idem | chiffres du tableau de bord : totaux, puis répartition par mode, gravité et mois |
 | `PATCH /api/v1/accidents/{id}/validation` | safety_manager, admin | changer le statut de validation |
 | `GET /api/v1/incidents`, `/incidents/{id}` | analyst, researcher, safety_manager, admin | incidents |
 | `GET /api/v1/imports`, `/imports/{id}` | analyst, researcher, safety_manager, admin | rapports qualité des imports, avec les rejets |

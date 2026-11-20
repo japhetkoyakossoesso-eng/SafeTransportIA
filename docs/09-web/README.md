@@ -1,6 +1,6 @@
 # Phase 09 : interface web (partie MVP)
 
-Le code est dans `web/` (Vue 3, Vite, Vue Router, Chart.js). L'interface ne parle qu'à l'API Java.
+Le code est dans `web/` (Vue 3, Vite, Vue Router, Chart.js, icônes Lucide, polices Inter et Manrope incluses dans le site). L'interface ne parle qu'à l'API Java.
 
 ## Lancer
 
@@ -28,13 +28,21 @@ Vite renvoie `/api` vers l'API sur le port 8080.
 
 ## Écrans
 
-- **Connexion** : comptes de démonstration `analyste.demo`, `resp.securite.demo`, `admin.demo` (mot de passe `demo`). Le jeton reste dans le navigateur 8 heures ; s'il expire, on revient à la connexion.
-- **Recherche** : filtres par mode, période, pays, source et gravité ; cases pour inclure les accidents non vérifiés et simulés. Les filtres sont dans l'adresse de la page, donc une recherche se partage par simple copie du lien.
-- **Graphique annuel** : nombre d'accidents et de tués par an, avec les mêmes filtres que la liste. La source est écrite sous le graphique et dans l'image téléchargée. Ce sont des nombres bruts, pas des taux.
-- **Liste** : 50 lignes par page, export CSV avec les mêmes filtres. Sur téléphone, chaque ligne devient une petite carte.
-- **Fiche détail** : date, heure (UTC), lieu et sa précision, gravité harmonisée et libellé d'origine, victimes, source avec sa licence et sa référence, statut, facteurs marqués « fait établi », « probable » ou « hypothèse ».
+![Tableau de bord](captures/tableau-clair.png)
+
+- **Connexion** : écran en deux parties, comptes de démonstration en un clic (`analyste.demo`, `resp.securite.demo`, `admin.demo`, mot de passe `demo`). Le jeton reste dans le navigateur 8 heures ; s'il expire, on revient à la connexion.
+- **Tableau de bord** (page d'accueil) : accidents, accidents mortels, tués et blessés graves pour l'année et le mode choisis, courbe mois par mois, répartition par mode, barres de gravité, derniers accidents mortels. Seuls les accidents validés et réels sont comptés, et un encadré rappelle que ce sont des nombres bruts, pas des taux de risque.
+- **Recherche** : filtres dans une colonne (mode, période, pays, source, gravité, non vérifiés, simulés). Les filtres sont dans l'adresse de la page, donc une recherche se partage par simple copie du lien. Sur téléphone, les filtres s'ouvrent avec un bouton.
+- **Graphiques** : la source est écrite sous chaque graphique et dans l'image téléchargée.
+- **Liste** : 50 lignes par page, un clic sur une ligne ouvre la fiche, export CSV avec les mêmes filtres. Sur téléphone, chaque ligne devient une petite carte.
+- **Fiche détail** : victimes en grand, circonstances, source et traçabilité, facteurs marqués « fait établi », « probable » ou « hypothèse ». Une donnée simulée a un bandeau violet hachuré.
+- **Mode sombre** : bouton lune en haut à droite. Sans choix, l'interface suit le réglage du système.
 
 Les étiquettes « Simulé » et « Non vérifié » sont visibles dans la liste et sur la fiche.
+
+| Mode sombre | Fiche d'un accident simulé | Téléphone |
+| --- | --- | --- |
+| ![](captures/tableau-sombre.png) | ![](captures/fiche-simulee-clair.png) | ![](captures/mobile-tableau.png) |
 
 ## Tests
 
@@ -43,4 +51,4 @@ cd web
 npm test
 ```
 
-Les tests simulent l'API : connexion, redirection sans jeton ou avec un jeton expiré, filtres envoyés à la liste et au graphique, étiquettes, fiche détail.
+Les tests simulent l'API : connexion, tableau de bord, redirection sans jeton ou avec un jeton expiré, filtres envoyés à la liste et au graphique, étiquettes, fiche détail.

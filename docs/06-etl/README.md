@@ -74,6 +74,6 @@ Ce que fait l'import :
 | `fuseau_inconnu`, `heure_invalide` | chargé, heure laissée vide (le fuseau manque surtout pour les événements hors États-Unis) |
 | `gravite_incoherente` | chargé, gravité corrigée en `fatal` |
 | `coordonnees_invalides` | chargé sans point |
-| `pays_inconnu` | chargé avec le pays `ZZ` (code NTSB à trois lettres non converti) |
+| `pays_inconnu` | chargé avec le pays `ZZ` (code NTSB à trois lettres non converti, ou code propre au NTSB comme `A1` pour une zone maritime) |
 
 Les noms de colonnes viennent de la documentation du NTSB (`eadmspub.pdf`). Ils n'ont pas pu être vérifiés sur un vrai fichier ici : si une colonne manque, l'import s'arrête et donne la liste des colonnes absentes.

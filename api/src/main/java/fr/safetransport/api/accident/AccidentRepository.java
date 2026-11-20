@@ -81,6 +81,28 @@ public class AccidentRepository {
         return new Statistiques(annees, sources);
     }
 
+    public Apercu apercu(Filtre filtre, List<String> gravites) {
+        MapSqlParameterSource p = new MapSqlParameterSource();
+        String where = where(filtre, gravites, p);
+        Apercu.Totaux totaux = jdbc.queryForObject(
+            "SELECT count(*) AS accidents, count(*) FILTER (WHERE e.severity = 'fatal') AS mortels, "
+                + "coalesce(sum(e.fatalities), 0) AS tues, coalesce(sum(e.serious_injuries), 0) AS graves "
+                + FROM + where,
+            p, (rs, i) -> new Apercu.Totaux(rs.getLong("accidents"), rs.getLong("mortels"), rs.getLong("tues"),
+                rs.getLong("graves")));
+        return new Apercu(totaux,
+            groupes("m.code", where, p),
+            groupes("e.severity::text", where, p),
+            groupes("to_char(e.occurred_date, 'YYYY-MM')", where, p),
+            jdbc.queryForList("SELECT DISTINCT s.name " + FROM + where + " ORDER BY 1", p, String.class));
+    }
+
+    private List<Apercu.Groupe> groupes(String cle, String where, MapSqlParameterSource p) {
+        return jdbc.query("SELECT " + cle + " AS cle, count(*) AS accidents, coalesce(sum(e.fatalities), 0) AS tues "
+                + FROM + where + " GROUP BY 1 ORDER BY 1",
+            p, (rs, i) -> new Apercu.Groupe(rs.getString("cle"), rs.getLong("accidents"), rs.getLong("tues")));
+    }
+
     public Optional<AccidentDetail> detail(UUID id) {
         MapSqlParameterSource p = new MapSqlParameterSource("id", id);
         List<AccidentDetail> trouves = jdbc.query("""

@@ -75,6 +75,13 @@ def test_pays_hors_usa():
     assert [p["regle"] for p in ligne["problemes"]] == ["pays_inconnu"]
 
 
+def test_code_ntsb_de_mer_non_iso():
+    groupe = {"event": dict(EVENEMENTS["20230601000006"]["event"], ev_country="A1"), "aircraft": []}
+    ligne = transformer("x", groupe)
+    assert ligne["pays"] == "ZZ"
+    assert [p["regle"] for p in ligne["problemes"]] == ["pays_inconnu"]
+
+
 def test_des_tues_forcent_la_gravite():
     groupe = {"event": dict(EVENEMENTS["20230301000003"]["event"], inj_tot_f="1"), "aircraft": []}
     ligne = transformer("x", groupe)
