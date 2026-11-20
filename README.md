@@ -39,6 +39,9 @@ docker compose up --build     # premier lancement : quelques minutes
 Ordre de démarrage automatique : `db` → `flyway` (applique les migrations + le jeu simulé, puis
 s'arrête) → `api`, `ai`, `admin`, `notifications`, `web`.
 
+Pour juste utiliser le site : `make web` (ou `Cmd+Maj+B` dans VS Code) démarre ce qu'il faut et
+ouvre http://localhost:5173.
+
 | Vérifier | URL |
 |---|---|
 | Front | http://localhost:5173 (affiche l'état de l'API et de l'IA) |

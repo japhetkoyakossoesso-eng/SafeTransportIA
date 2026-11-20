@@ -1,0 +1,18 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Lancer SafeTransportIA",
+      "type": "shell",
+      "command": "make web",
+      "group": { "kind": "build", "isDefault": true },
+      "problemMatcher": []
+    },
+    {
+      "label": "Arrêter SafeTransportIA",
+      "type": "shell",
+      "command": "make down",
+      "problemMatcher": []
+    }
+  ]
+}

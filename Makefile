@@ -1,7 +1,11 @@
-.PHONY: env up down logs db-migrate db-test db-reset psql test uml
+.PHONY: env web up down logs db-migrate db-test db-reset psql test uml
 
 env:
 	@test -f .env || cp .env.example .env
+
+# Lance le site et ouvre http://localhost:5173
+web:
+	@sh scripts/demarrer-web.sh
 
 up: env
 	docker compose up --build -d

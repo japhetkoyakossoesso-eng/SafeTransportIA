@@ -4,11 +4,17 @@ Le code est dans `web/` (Vue 3, Vite, Vue Router, Chart.js). L'interface ne parl
 
 ## Lancer
 
-Avec Docker, tout est servi sur http://localhost:5173 :
+Le plus simple :
 
 ```bash
-docker compose up -d --build api web
+make web
 ```
+
+La commande démarre la base, l'API et le site, attend que l'API réponde, affiche le lien
+http://localhost:5173 et l'ouvre dans le navigateur. Dans VS Code, la même chose se lance avec
+`Cmd+Maj+B` (tâche « Lancer SafeTransportIA » dans `.vscode/tasks.json`). Pour arrêter : `make down`.
+
+Sans make : `docker compose up -d --build api web`, puis ouvrir http://localhost:5173.
 
 Pour travailler sur l'interface avec le rechargement automatique (base et API démarrées) :
 
