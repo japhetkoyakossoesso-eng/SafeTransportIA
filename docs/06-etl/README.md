@@ -71,7 +71,7 @@ Ce que fait l'import :
 |---|---|
 | `type_inconnu` | événement rejeté (ni ACC ni INC) |
 | `date_invalide` | événement rejeté |
-| `fuseau_inconnu`, `heure_invalide` | chargé, heure laissée vide |
+| `fuseau_inconnu`, `heure_invalide` | chargé, heure laissée vide (le fuseau manque surtout pour les événements hors États-Unis) |
 | `gravite_incoherente` | chargé, gravité corrigée en `fatal` |
 | `coordonnees_invalides` | chargé sans point |
 | `pays_inconnu` | chargé avec le pays `ZZ` (code NTSB à trois lettres non converti) |

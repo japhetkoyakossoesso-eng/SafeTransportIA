@@ -126,6 +126,21 @@ class AccidentControllerTest {
     }
 
     @Test
+    void statistiquesAnnuellesAvecLesMemesFiltres() throws Exception {
+        when(accidents.parAnnee(any(), any())).thenReturn(new Statistiques(
+            List.of(new Statistiques.Annee(2023, 54822, 3203, 3398)), List.of("ONISR BAAC")));
+
+        mvc.perform(get("/api/v1/accidents/stats/annual").param("mode", "road").with(role("analyst")))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.years[0].fatalities").value(3398))
+            .andExpect(jsonPath("$.sources[0]").value("ONISR BAAC"));
+
+        ArgumentCaptor<Filtre> filtre = ArgumentCaptor.forClass(Filtre.class);
+        verify(accidents).parAnnee(filtre.capture(), isNull());
+        assertThat(filtre.getValue().mode()).isEqualTo("road");
+    }
+
+    @Test
     void exportCsvAvecEntete() throws Exception {
         mvc.perform(get("/api/v1/accidents/export.csv").with(role("analyst")))
             .andExpect(status().isOk())

@@ -24,6 +24,7 @@ def test_dossier_sans_export(tmp_path):
 
 def test_dates_et_heures():
     assert lire_date("2023-05-07") == date(2023, 5, 7)
+    assert lire_date("2023-05-07 00:00:00") == date(2023, 5, 7)
     assert lire_date("05/07/23 00:00:00") == date(2023, 5, 7)
     assert lire_date("12/17/82 00:00:00") == date(1982, 12, 17)
     assert lire_heure("815") == (8, 15)
