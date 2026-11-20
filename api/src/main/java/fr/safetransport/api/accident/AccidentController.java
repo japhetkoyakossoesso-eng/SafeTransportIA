@@ -108,6 +108,22 @@ public class AccidentController {
         return accidents.parAnnee(filtre, severity);
     }
 
+    @GetMapping("/stats/overview")
+    @PreAuthorize(SecurityConfig.LECTURE)
+    public Apercu apercu(
+            @RequestParam(required = false) String mode,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to,
+            @RequestParam(required = false) List<String> severity,
+            @RequestParam(required = false) String country,
+            @RequestParam(required = false) String source,
+            @RequestParam(defaultValue = "false") boolean includeUnverified,
+            @RequestParam(defaultValue = "false") boolean includeSimulated) {
+        verifierGravites(severity);
+        Filtre filtre = new Filtre(mode, from, to, country, source, includeUnverified, includeSimulated);
+        return accidents.apercu(filtre, severity);
+    }
+
     @GetMapping("/{id}")
     @PreAuthorize(SecurityConfig.LECTURE)
     public AccidentDetail detail(@PathVariable UUID id) {

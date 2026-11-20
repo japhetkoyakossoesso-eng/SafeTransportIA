@@ -27,6 +27,12 @@ export const PRECISIONS = {
   unknown: 'lieu inconnu',
 };
 
+// Commune, département et pays, en une ligne
+export function lieuCourt(a) {
+  const departement = /^\d/.test(a.department || '') ? `dép. ${a.department}` : a.department;
+  return [a.municipality, departement, a.country].filter(Boolean).join(', ');
+}
+
 export function date(iso) {
   if (!iso) return '';
   const [a, m, j] = iso.slice(0, 10).split('-');

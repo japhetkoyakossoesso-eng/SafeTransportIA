@@ -1,90 +1,75 @@
 <script setup>
-import {
-  BarController, BarElement, CategoryScale, Chart, Legend, LinearScale, LineController, LineElement, PointElement,
-  Tooltip,
-} from 'chart.js';
-import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
-
-Chart.register(BarController, BarElement, CategoryScale, LinearScale, LineController, LineElement, PointElement,
-  Tooltip, Legend);
+import { ImageDown } from 'lucide-vue-next';
+import { ref } from 'vue';
+import { axe, axeCategories, bulle, telechargerImage, useGraphique } from '../graphiques.js';
+import { couleur } from '../theme.js';
 
 const props = defineProps({ stats: { type: Object, required: true } });
-
 const toile = ref(null);
-let graphique = null;
 
 function source() {
   return `Source : ${props.stats.sources?.length ? props.stats.sources.join(', ') : 'aucune'}`;
 }
 
-function dessiner() {
+const graphique = useGraphique(toile, () => {
   const annees = props.stats.years || [];
-  const donnees = {
-    labels: annees.map((a) => String(a.year)),
-    datasets: [
-      { type: 'bar', label: 'Accidents', data: annees.map((a) => a.accidents), backgroundColor: '#1f5fbf', yAxisID: 'y' },
-      { type: 'line', label: 'Tués', data: annees.map((a) => a.fatalities), borderColor: '#b3261e', backgroundColor: '#b3261e', yAxisID: 'y2' },
-    ],
-  };
-  if (graphique) {
-    graphique.data = donnees;
-    graphique.update();
-    return;
-  }
-  graphique = new Chart(toile.value, {
-    data: donnees,
+  return {
+    data: {
+      labels: annees.map((a) => String(a.year)),
+      datasets: [
+        {
+          type: 'bar', label: 'Accidents', data: annees.map((a) => a.accidents), yAxisID: 'y',
+          backgroundColor: couleur('marque'), borderRadius: 6, maxBarThickness: 46,
+        },
+        {
+          type: 'line', label: 'Tués', data: annees.map((a) => a.fatalities), yAxisID: 'y2', tension: 0.35,
+          borderColor: couleur('fatal'), backgroundColor: couleur('fatal'), pointRadius: 4, borderWidth: 2.5,
+        },
+      ],
+    },
     options: {
       responsive: true,
       maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { align: 'end', labels: { color: couleur('discret'), usePointStyle: true, boxWidth: 7, boxHeight: 7 } },
+        tooltip: bulle(),
+      },
       scales: {
-        y: { beginAtZero: true, title: { display: true, text: 'Accidents' } },
-        y2: { beginAtZero: true, position: 'right', grid: { drawOnChartArea: false }, title: { display: true, text: 'Tués' } },
+        x: axeCategories(),
+        y: axe('Accidents'),
+        y2: axe('Tués', { position: 'right', grid: { drawOnChartArea: false } }),
       },
     },
-  });
-}
+  };
+}, () => props.stats);
 
-// L'image exportée garde la source écrite sous le graphique, sur fond blanc
 function exporter() {
-  const toileGraphique = graphique.canvas;
-  const echelle = toileGraphique.width / toileGraphique.clientWidth || 1;
-  const image = document.createElement('canvas');
-  image.width = toileGraphique.width;
-  image.height = toileGraphique.height + 36 * echelle;
-  const ctx = image.getContext('2d');
-  ctx.fillStyle = '#ffffff';
-  ctx.fillRect(0, 0, image.width, image.height);
-  ctx.drawImage(toileGraphique, 0, 0);
-  ctx.fillStyle = '#5b6475';
-  ctx.font = `${12 * echelle}px system-ui, sans-serif`;
-  ctx.fillText(source(), 8 * echelle, toileGraphique.height + 24 * echelle, image.width - 16 * echelle);
-  const lien = document.createElement('a');
-  lien.href = image.toDataURL('image/png');
-  lien.download = 'evolution-annuelle.png';
-  lien.click();
+  telechargerImage(graphique(), `${source()}. Nombres bruts, non rapportés à l'exposition.`, 'evolution-annuelle.png');
 }
-
-onMounted(dessiner);
-watch(() => props.stats, dessiner);
-onBeforeUnmount(() => graphique?.destroy());
 </script>
 
 <template>
   <section class="carte">
-    <div class="titre-graphique">
-      <h2>Évolution annuelle</h2>
-      <button class="secondaire" :disabled="!stats.years?.length" @click="exporter">Télécharger l'image</button>
+    <div class="entete-carte">
+      <div>
+        <h2>Évolution annuelle</h2>
+        <p class="discret sous-titre">Accidents (barres) et personnes tuées (courbe)</p>
+      </div>
+      <button class="bouton secondaire" :disabled="!stats.years?.length" @click="exporter">
+        <ImageDown :size="16" aria-hidden="true" />Télécharger l'image
+      </button>
     </div>
     <p v-if="!stats.years?.length" class="discret">Aucune donnée pour ces filtres.</p>
-    <div v-show="stats.years?.length" class="zone"><canvas ref="toile" /></div>
-    <p class="discret source">
-      {{ source() }}. Nombres bruts, non rapportés à l'exposition.
-    </p>
+    <div v-show="stats.years?.length" class="zone">
+      <canvas ref="toile" role="img" aria-label="Nombre d'accidents et de tués par année" />
+    </div>
+    <p class="discret source">{{ source() }}. Nombres bruts, non rapportés à l'exposition.</p>
   </section>
 </template>
 
 <style scoped>
-.titre-graphique { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
-h2 { font-size: 1.1rem; margin: 0; }
-.zone { position: relative; height: 16rem; }
+.sous-titre, .source { margin: 0.15rem 0 0; }
+.zone { position: relative; height: 17rem; }
+.source { margin-top: 0.75rem; font-size: 0.8rem; }
 </style>

@@ -141,6 +141,20 @@ class AccidentControllerTest {
     }
 
     @Test
+    void apercuDuTableauDeBord() throws Exception {
+        when(accidents.apercu(any(), any())).thenReturn(new Apercu(new Apercu.Totaux(54822, 3203, 3398, 16582),
+            List.of(new Apercu.Groupe("road", 54822, 3398)), List.of(), List.of(), List.of("ONISR BAAC")));
+
+        mvc.perform(get("/api/v1/accidents/stats/overview").param("country", "FR").with(role("analyst")))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.totals.fatalities").value(3398))
+            .andExpect(jsonPath("$.modes[0].key").value("road"));
+
+        mvc.perform(get("/api/v1/accidents/stats/overview").param("severity", "terrible").with(role("analyst")))
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
     void exportCsvAvecEntete() throws Exception {
         mvc.perform(get("/api/v1/accidents/export.csv").with(role("analyst")))
             .andExpect(status().isOk())

@@ -100,6 +100,15 @@ class BaseReelleTest {
             .andExpect(jsonPath("$.years[0].accidents").value(2))
             .andExpect(jsonPath("$.sources.length()").value(1));
 
+        mvc.perform(get("/api/v1/accidents/stats/overview").header("Authorization", analyste)
+                .param("includeSimulated", "true").param("includeUnverified", "true").param("source", "sim_demo"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.totals.accidents").value(2))
+            .andExpect(jsonPath("$.totals.fatalities").value(1))
+            .andExpect(jsonPath("$.modes[0].key").value("road"))
+            .andExpect(jsonPath("$.severities.length()").value(2))
+            .andExpect(jsonPath("$.months[0].key").value("2025-03"));
+
         String csv = mvc.perform(get("/api/v1/accidents/export.csv").header("Authorization", analyste)
                 .param("includeSimulated", "true").param("includeUnverified", "true").param("source", "sim_demo"))
             .andExpect(status().isOk())
