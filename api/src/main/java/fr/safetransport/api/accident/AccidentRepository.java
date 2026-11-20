@@ -66,6 +66,21 @@ public class AccidentRepository {
         jdbc.query(sql, p, ligne);
     }
 
+    // Évolution annuelle avec les mêmes filtres que la liste
+    public Statistiques parAnnee(Filtre filtre, List<String> gravites) {
+        MapSqlParameterSource p = new MapSqlParameterSource();
+        String where = where(filtre, gravites, p);
+        List<Statistiques.Annee> annees = jdbc.query(
+            "SELECT extract(year FROM e.occurred_date)::int AS annee, count(*) AS accidents, "
+                + "count(*) FILTER (WHERE e.severity = 'fatal') AS mortels, "
+                + "coalesce(sum(e.fatalities), 0) AS tues " + FROM + where + " GROUP BY 1 ORDER BY 1",
+            p, (rs, i) -> new Statistiques.Annee(rs.getInt("annee"), rs.getLong("accidents"),
+                rs.getLong("mortels"), rs.getLong("tues")));
+        List<String> sources = jdbc.queryForList("SELECT DISTINCT s.name " + FROM + where + " ORDER BY 1",
+            p, String.class);
+        return new Statistiques(annees, sources);
+    }
+
     public Optional<AccidentDetail> detail(UUID id) {
         MapSqlParameterSource p = new MapSqlParameterSource("id", id);
         List<AccidentDetail> trouves = jdbc.query("""

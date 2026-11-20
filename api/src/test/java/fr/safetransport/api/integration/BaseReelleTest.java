@@ -93,6 +93,13 @@ class BaseReelleTest {
                 .contentType(MediaType.APPLICATION_JSON).content("{\"status\":\"" + avant + "\"}"));
         }
 
+        mvc.perform(get("/api/v1/accidents/stats/annual").header("Authorization", analyste)
+                .param("includeSimulated", "true").param("includeUnverified", "true").param("source", "sim_demo"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.years[0].year").value(2025))
+            .andExpect(jsonPath("$.years[0].accidents").value(2))
+            .andExpect(jsonPath("$.sources.length()").value(1));
+
         String csv = mvc.perform(get("/api/v1/accidents/export.csv").header("Authorization", analyste)
                 .param("includeSimulated", "true").param("includeUnverified", "true").param("source", "sim_demo"))
             .andExpect(status().isOk())

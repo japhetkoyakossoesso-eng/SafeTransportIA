@@ -30,7 +30,7 @@ def rejet(regle, champ, message):
 
 
 def lire_date(texte):
-    """mdb-export écrit 2023-05-07 (avec -D) ou 05/07/23 00:00:00 (par défaut)."""
+    """mdb-export écrit 2023-05-07 00:00:00 (avec -T) ou 05/07/23 00:00:00 (par défaut)."""
     texte = texte.split(" ")[0]
     if "-" in texte:
         return date.fromisoformat(texte)
@@ -99,7 +99,7 @@ def transformer(ev_id, groupe):
         if e["ev_time"]:
             heures, minutes = lire_heure(e["ev_time"])
             if fuseau is None:
-                problemes.append(probleme("fuseau_inconnu", "ev_tmzn", f"fuseau « {e['ev_tmzn']} » inconnu"))
+                problemes.append(probleme("fuseau_inconnu", "ev_tmzn", f"fuseau « {e['ev_tmzn']} » absent"))
             else:
                 tz = timezone(timedelta(hours=fuseau))
                 occurred_at = datetime(jour.year, jour.month, jour.day, heures, minutes, tzinfo=tz)

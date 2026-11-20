@@ -36,6 +36,7 @@ def extraire(archive, dossier=None):
     for table in TABLES:
         sortie = dossier / f"{table}.csv"
         with open(sortie, "w", encoding="utf-8") as f:
-            subprocess.run(["mdb-export", "-D", "%Y-%m-%d", str(mdb), table], stdout=f, check=True)
+            commande = ["mdb-export", "-D", "%Y-%m-%d", "-T", "%Y-%m-%d %H:%M:%S", str(mdb), table]
+            subprocess.run(commande, stdout=f, check=True)
         fichiers.append(sortie)
     return fichiers

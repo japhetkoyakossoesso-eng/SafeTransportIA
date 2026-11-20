@@ -1,0 +1,46 @@
+:root {
+  --texte: #1d2433;
+  --discret: #5b6475;
+  --fond: #f6f7f9;
+  --carte: #ffffff;
+  --bord: #d9dde4;
+  --accent: #1f5fbf;
+  --alerte: #a33a00;
+  --mortel: #b3261e;
+  --grave: #c25e00;
+  --leger: #8a6d00;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; font-family: system-ui, sans-serif; color: var(--texte); background: var(--fond); }
+a { color: var(--accent); }
+button, input, select { font: inherit; }
+button { cursor: pointer; border: 1px solid var(--accent); background: var(--accent); color: #fff; border-radius: 4px; padding: 0.4rem 0.9rem; }
+button.secondaire { background: transparent; color: var(--accent); }
+button:disabled { opacity: 0.5; cursor: default; }
+input, select { border: 1px solid var(--bord); border-radius: 4px; padding: 0.35rem 0.5rem; background: #fff; }
+
+.page { max-width: 72rem; margin: 0 auto; padding: 1rem; }
+.carte { background: var(--carte); border: 1px solid var(--bord); border-radius: 6px; padding: 1rem; margin-bottom: 1rem; }
+.erreur { color: var(--alerte); }
+.discret { color: var(--discret); font-size: 0.9rem; }
+
+.etiquette { display: inline-block; font-size: 0.75rem; font-weight: 600; padding: 0.1rem 0.45rem; border-radius: 3px; margin-right: 0.25rem; }
+.etiquette.simule { background: #6b2fa3; color: #fff; }
+.etiquette.non-verifie { background: #ffe8b3; color: #6a4500; }
+.gravite-fatal { color: var(--mortel); font-weight: 600; }
+.gravite-serious { color: var(--grave); font-weight: 600; }
+.gravite-minor { color: var(--leger); }
+
+table { width: 100%; border-collapse: collapse; }
+th, td { text-align: left; padding: 0.45rem; border-bottom: 1px solid var(--bord); vertical-align: top; }
+th { font-size: 0.85rem; color: var(--discret); }
+
+/* Sur téléphone, chaque ligne devient une petite carte */
+@media (max-width: 640px) {
+  .page { padding: 0.5rem; }
+  table.adaptatif thead { display: none; }
+  table.adaptatif tr { display: block; border: 1px solid var(--bord); border-radius: 6px; margin-bottom: 0.5rem; background: var(--carte); }
+  table.adaptatif td { display: flex; justify-content: space-between; gap: 1rem; border: none; padding: 0.3rem 0.6rem; }
+  table.adaptatif td::before { content: attr(data-libelle); color: var(--discret); font-size: 0.85rem; }
+}
