@@ -21,10 +21,11 @@ Plan retenu : tout le périmètre du cahier des charges, terminé fin mars 2027.
 | 02 Sources | fait ([docs/02-sources](02-sources/README.md)) |
 | 03 UML | fait ([docs/03-uml](03-uml/README.md)) |
 | 04 Environnement et CI | fait (Docker Compose, CI GitHub Actions) |
-| 05 Base de données | fait (migrations Flyway V1 à V4, 29 tests SQL) |
+| 05 Base de données | fait (migrations Flyway V1 à V5, 29 tests SQL) |
 | 06 ETL Python | fait ([docs/06-etl](06-etl/README.md)) : BAAC et NTSB validés sur 2023 |
 | 07 API Java | fait ([docs/07-api](07-api/README.md)) |
 | 09 Interface web (partie MVP) | fait ([docs/09-web](09-web/README.md)) |
+| 10 Statistiques | fait ([docs/10-stats](10-stats/README.md)) : taux 2023 conformes à l'ONISR et à l'AOPA |
 
 ## Jalon 1 : MVP (23 novembre 2026 → fin janvier 2027)
 

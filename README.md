@@ -10,7 +10,7 @@ et suivre leur efficacité.
 
 ![Tableau de bord de SafeTransport AI](docs/09-web/captures/tableau-clair.png)
 
-Feuille de route : [docs/feuille-de-route.md](docs/feuille-de-route.md) · Architecture : [docs/architecture.md](docs/architecture.md) · Cadrage et backlog : [docs/01-cadrage](docs/01-cadrage/README.md) · Sources : [docs/02-sources](docs/02-sources/README.md) · UML : [docs/03-uml](docs/03-uml/README.md) · Import BAAC : [docs/06-etl](docs/06-etl/README.md) · API : [docs/07-api](docs/07-api/README.md) · Interface web : [docs/09-web](docs/09-web/README.md)
+Feuille de route : [docs/feuille-de-route.md](docs/feuille-de-route.md) · Architecture : [docs/architecture.md](docs/architecture.md) · Cadrage et backlog : [docs/01-cadrage](docs/01-cadrage/README.md) · Sources : [docs/02-sources](docs/02-sources/README.md) · UML : [docs/03-uml](docs/03-uml/README.md) · Import BAAC : [docs/06-etl](docs/06-etl/README.md) · API : [docs/07-api](docs/07-api/README.md) · Interface web : [docs/09-web](docs/09-web/README.md) · Statistiques : [docs/10-stats](docs/10-stats/README.md)
 
 ## Contenu du dépôt
 
